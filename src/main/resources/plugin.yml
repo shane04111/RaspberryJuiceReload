@@ -1,0 +1,4 @@
+name: RaspberryJuiceReload
+version: '1.0-SNAPSHOT'
+main: com.shane.RaspberryJuiceReload.RaspberryJuiceReload
+api-version: '1.20'
