@@ -6,6 +6,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -19,10 +20,7 @@ import org.bukkit.util.Vector;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 處理與客戶端的遠程會話
@@ -81,24 +79,6 @@ public class RemoteSession {
         inThread.start();
         Thread outThread = new Thread(new OutputThread());
         outThread.start();
-    }
-
-    /**
-     * 獲取原點位置
-     *
-     * @return 原點位置
-     */
-    public Location getOrigin() {
-        return origin;
-    }
-
-    /**
-     * 設置原點位置
-     *
-     * @param origin 新的原點位置
-     */
-    public void setOrigin(Location origin) {
-        this.origin = origin;
     }
 
     /**
@@ -192,6 +172,19 @@ public class RemoteSession {
         handleCommand(methodName, args);
     }
 
+    private void initCommands() {
+        commandHandlers.put("dev.block.getAll", args -> {
+            StringBuilder data = new StringBuilder();
+            for (Material material : Material.values()) {
+                if (material.isBlock()) {
+                    data.append(material.createBlockData().getAsString()).append(", ");
+                }
+            }
+            send(data.toString());
+        });
+
+    }
+
     /**
      * 處理命令及其參數
      *
@@ -204,13 +197,29 @@ public class RemoteSession {
             World world = origin.getWorld();
             int length = args.length;
             switch (c) {
+                case "dev.block.getAll" -> {
+                    StringBuilder data = new StringBuilder();
+                    for (Material material : Material.values()) {
+                        if (material.isBlock()) {
+                            data.append(material.createBlockData().getAsString()).append(", ");
+                        }
+                    }
+                    send(data.toString());
+                }
+                case "dev.entity.getAll" -> {
+                    StringBuilder data = new StringBuilder();
+                    for (EntityType type : EntityType.values()) {
+                        data.append(type).append(", ");
+                    }
+                    send(data.toString());
+                }
                 case "world.getBlock" -> {
                     if (length != 3) {
                         send("Fail");
                         break;
                     }
                     Location loc = parseRelativeBlockLocation(args[0], args[1], args[2]);
-                    send(world.getBlockAt(loc).getType().toString());
+                    send(world.getBlockAt(loc).getType().getKey());
                 }
                 case "world.getBlocks" -> {
                     if (length != 6) {
@@ -711,7 +720,7 @@ public class RemoteSession {
                     Block thisBlock = world.getBlockAt(loc);
 
                     // 使用現代API設置告示牌
-                    thisBlock.setType(org.bukkit.Material.valueOf(args[3]));
+                    thisBlock.setType(Material.valueOf(args[3]));
 
                     if (thisBlock.getState() instanceof Sign sign) {
                         for (int i = 5; i - 5 < 4 && i < args.length; i++) {
@@ -729,15 +738,13 @@ public class RemoteSession {
                         break;
                     }
                     Location loc = parseRelativeBlockLocation(args[0], args[1], args[2]);
-                    Entity entity = world.spawnEntity(loc, Objects.requireNonNull(EntityType.fromId(Integer.parseInt(args[3]))));
+                    Entity entity = world.spawnEntity(loc, Objects.requireNonNull(EntityType.valueOf(args[3])));
                     send(String.valueOf(entity.getEntityId()));
                 }
                 case "world.getEntityTypes" -> {
                     StringBuilder bdr = new StringBuilder();
                     for (EntityType entityType : EntityType.values()) {
                         if (entityType.isSpawnable()) {
-                            bdr.append(entityType.ordinal());
-                            bdr.append(",");
                             bdr.append(entityType);
                             bdr.append("|");
                         }
@@ -869,7 +876,7 @@ public class RemoteSession {
     private void updateBlock(World world, Location loc, String blockTypeStr, String blockDataStr) {
         RaspberryJuiceReload.logger.info(blockDataStr);
         Block thisBlock = world.getBlockAt(loc);
-        org.bukkit.Material blockType = org.bukkit.Material.valueOf(blockTypeStr);
+        Material blockType = Material.valueOf(blockTypeStr);
 
         if (thisBlock.getType() != blockType) {
             thisBlock.setType(blockType);
@@ -879,7 +886,7 @@ public class RemoteSession {
                     BlockData data = Bukkit.createBlockData(blockType, blockDataStr);
                     thisBlock.setBlockData(data);
                 } catch (Exception e) {
-                    RaspberryJuiceReload.logger.warn("Failed to set block data");
+                    RaspberryJuiceReload.logger.warn("Failed to set block data", e);
                 }
             }
         }
