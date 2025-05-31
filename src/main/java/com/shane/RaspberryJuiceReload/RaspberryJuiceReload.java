@@ -1,10 +1,10 @@
-package com.shane.RaspberryJuiceReload;
+package com.shane.raspberryjuicereload;
 
 import java.net.InetSocketAddress;
 import java.util.*;
 
-import com.shane.RaspberryJuiceReload.Type.HitClickType;
-import com.shane.RaspberryJuiceReload.Type.LocationType;
+import com.shane.raspberryjuicereload.type.HitClickType;
+import com.shane.raspberryjuicereload.type.LocationType;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -132,21 +132,21 @@ public class RaspberryJuiceReload extends JavaPlugin implements Listener {
         }
 
         for (RemoteSession session: sessions) {
-            session.queuePlayerInteractEvent(event);
+            session.commandProcessor.commands.event.queuePlayerInteractEvent(event);
         }
     }
 
     @EventHandler(ignoreCancelled=true)
     public void onChatPosted(AsyncChatEvent event) {
         for (RemoteSession session: sessions) {
-            session.queueChatPostedEvent(event);
+            session.commandProcessor.commands.event.queueChatPostedEvent(event);
         }
     }
 
     @EventHandler(ignoreCancelled=true)
     public void onProjectileHit(ProjectileHitEvent event) {
         for (RemoteSession session: sessions) {
-            session.queueProjectileHitEvent(event);
+            session.commandProcessor.commands.event.queueProjectileHitEvent(event);
         }
     }
 

@@ -1,4 +1,4 @@
-package com.shane.RaspberryJuiceReload;
+package com.shane.raspberryjuicereload;
 
 import java.io.*;
 import java.net.*;

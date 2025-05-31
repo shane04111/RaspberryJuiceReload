@@ -3,7 +3,7 @@ plugins {
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
-group = 'com.shane.RaspberryJuiceReload'
+group = 'com.shane.raspberryjuicereload'
 version = '1.0-SNAPSHOT'
 
 repositories {

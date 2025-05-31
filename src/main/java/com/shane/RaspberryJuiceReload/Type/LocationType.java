@@ -1,4 +1,4 @@
-package com.shane.RaspberryJuiceReload.Type;
+package com.shane.raspberryjuicereload.type;
 
 public enum LocationType {
     ABSOLUTE, RELATIVE
