@@ -35,7 +35,6 @@ public class BlockUtil {
     }
 
     private static String blockDataInit(String blockData) {
-        RaspberryJuiceReload.logger.info(blockData);
         if (blockData == null) return null;
         return blockData.replace('|', ',');
     }
@@ -54,41 +53,48 @@ public class BlockUtil {
     public static String getBlocks(Location pos1, Location pos2) {
         StringBuilder blockData = new StringBuilder();
         CuboidRegion region = new CuboidRegion(pos1, pos2);
-        for (int x = region.minX; x <= region.maxX; ++x) {
-            for (int z = region.minZ; z <= region.maxZ; ++z) {
-                for (int y = region.minY; y <= region.maxY; ++y) {
+        for (int x = region.minX; x <= region.maxX; ++x)
+            for (int z = region.minZ; z <= region.maxZ; ++z)
+                for (int y = region.minY; y <= region.maxY; ++y)
                     blockData.append(x).append(' ').append(y).append(' ').append(z).append(':').append(region.world.getBlockAt(x, y, z).getType()).append(';');
-                }
-            }
-        }
         return !blockData.isEmpty() ? blockData.substring(0, blockData.length() - 1) : "";
     }
 
     public static String getBlocksWithData(Location pos1, Location pos2) {
-        StringBuilder blockData = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         CuboidRegion region = new CuboidRegion(pos1, pos2);
         for (int x = region.minX; x <= region.maxX; ++x) {
             for (int z = region.minZ; z <= region.maxZ; ++z) {
                 for (int y = region.minY; y <= region.maxY; ++y) {
-                    blockData.append(x).append(' ')
-                            .append(y).append(' ')
-                            .append(z).append(": ")
-                            .append(region.world.getBlockAt(x, y, z).getType()).append(", ")
-                            .append(region.world.getBlockData(x, y, z).getAsString()).append(';');
+                    BlockData block = region.world.getBlockData(x, y, z);
+                    builder.append(x - region.minX).append(' ');
+                    builder.append(y - region.minY).append(' ');
+                    builder.append(z - region.minZ).append(": ");
+                    builder.append(block.getMaterial()).append(", ");
+                    builder.append(block.getAsString().replace(block.getMaterial().getKey().toString(), "")).append(';');
                 }
             }
         }
-        return !blockData.isEmpty() ? blockData.substring(0, blockData.length() - 1) : "";
+        return !builder.isEmpty() ? builder.substring(0, builder.length() - 1) : "";
     }
 
     public static void updateBlock(World world, Location loc, String blockTypeStr, String blockDataStr) {
-        RaspberryJuiceReload.logger.info(blockDataStr);
         Block thisBlock = world.getBlockAt(loc);
         Material blockType = Material.valueOf(blockTypeStr);
         if (thisBlock.getType() == blockType) return;
         thisBlock.setType(blockType);
         if (blockDataStr == null || blockDataStr.isEmpty()) return;
         BlockData data = Bukkit.createBlockData(blockType, blockDataInit(blockDataStr));
+        thisBlock.setBlockData(data);
+    }
+
+    public static void replaceBlock(World world, Location loc, String oldBlock, String newBlock, String newBlockData) {
+        Block thisBlock = world.getBlockAt(loc);
+        Material oldBlockType = thisBlock.getType(), newBlockType = Material.valueOf(newBlock);
+        if (oldBlockType != Material.valueOf(oldBlock)) return;
+        thisBlock.setType(newBlockType);
+        if (newBlockData.isEmpty()) return;
+        BlockData data = Bukkit.createBlockData(newBlockType, newBlockData);
         thisBlock.setBlockData(data);
     }
 

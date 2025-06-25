@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -32,6 +33,7 @@ public class WorldCommands extends CommandModule {
         handlers.put("world.getBlocksWithData", this::getBlocksWithData);
         handlers.put("world.setBlock", this::setBlock);
         handlers.put("world.setBlocks", this::setBlocks);
+        handlers.put("world.replaceBlock", this::replaceBlock);
         handlers.put("world.getPlayerIds", this::getPlayerIds);
         handlers.put("world.getPlayerId", this::getPlayerId);
         handlers.put("world.getEntities", this::getEntities);
@@ -62,8 +64,8 @@ public class WorldCommands extends CommandModule {
         if (args.length != 3) return "Fail";
         World world = context.world();
         Location loc = cmd.proc.location.parseRelativeBlockLocation(args[0], args[1], args[2]);
-        Block block = world.getBlockAt(loc);
-        return block.getType() + ", " + block.getBlockData().getAsString();
+        BlockData block = world.getBlockData(loc);
+        return block.getMaterial() + ", " + block.getAsString().replace(block.getMaterial().getKey().toString(), "");
     }
 
     private String getBlocksWithData(Context context) {
@@ -83,6 +85,15 @@ public class WorldCommands extends CommandModule {
             RaspberryJuiceReload.logger.error("Failed to set block data", e);
             return "Fail";
         }
+        return "Success";
+    }
+
+    private String replaceBlock(Context context) {
+        String[] args = context.args();
+        if (args.length < 5) return "Fail";
+        World world = context.world();
+        Location loc = cmd.proc.location.parseRelativeBlockLocation(args[0], args[1], args[2]);
+        BlockUtil.replaceBlock(world, loc, args[3], args[4], args.length > 5 ? args[5] : null);
         return "Success";
     }
 

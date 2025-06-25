@@ -1,5 +1,6 @@
 package com.shane.raspberryjuicereload.event;
 
+import com.shane.raspberryjuicereload.RaspberryJuiceReload;
 import com.shane.raspberryjuicereload.manager.LocationManager;
 import com.shane.raspberryjuicereload.util.BlockUtil;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -22,37 +23,20 @@ public class Event {
 
     public Event(LocationManager locationManager) {
         this.locationManager = locationManager;
+        RaspberryJuiceReload.logger.info(projectileHitQueue.toString());
     }
 
-    /**
-     * 將玩家交互事件加入隊列
-     *
-     * @param event 玩家交互事件
-     */
     public void queuePlayerInteractEvent(PlayerInteractEvent event) {
         interactEventQueue.add(event);
     }
 
-    /**
-     * 將聊天事件加入隊列
-     *
-     * @param event 聊天事件
-     */
     public void queueChatPostedEvent(AsyncChatEvent event) {
         chatPostedQueue.add(event);
     }
 
-    /**
-     * 將投射物命中事件加入隊列
-     *
-     * @param event 投射物命中事件
-     */
     public void queueProjectileHitEvent(ProjectileHitEvent event) {
-        if (event.getEntityType() == EntityType.ARROW) {
-            Arrow arrow = (Arrow) event.getEntity();
-            if (arrow.getShooter() instanceof Player) {
-                projectileHitQueue.add(event);
-            }
+        if (event.getEntity().getShooter() instanceof Player) {
+            projectileHitQueue.add(event);
         }
     }
 
@@ -126,45 +110,28 @@ public class Event {
     }
 
     public String getProjectileHits() {
-        return getProjectileHits(-1);
+        return getProjectileHits(-1, true);
     }
 
-    public String getProjectileHits(int entityId) {
+    public String getProjectileHits(int entityId, boolean removeProjectile) {
         StringBuilder b = new StringBuilder();
         for (Iterator<ProjectileHitEvent> iter = projectileHitQueue.iterator(); iter.hasNext(); ) {
             ProjectileHitEvent event = iter.next();
-            Arrow arrow = (Arrow) event.getEntity();
-            LivingEntity shooter = (LivingEntity) arrow.getShooter();
-            if (entityId == -1 || Objects.requireNonNull(shooter).getEntityId() == entityId) {
-                if (shooter instanceof Player player) {
-                    Block block = null;
-                    if (event.getHitBlock() != null) {
-                        block = event.getHitBlock();
-                    } else {
-                        block = arrow.getLocation().getBlock();
-                    }
-
-                    Location loc = block.getLocation();
-                    b.append(locationManager.blockLocationToRelative(loc));
-                    b.append(",");
-                    b.append(1);
-                    b.append(",");
-                    b.append(player.getName());
-                    b.append(",");
-
-                    Entity hitEntity = event.getHitEntity();
-                    if (hitEntity != null) {
-                        if (hitEntity instanceof Player hitPlayer) {
-                            b.append(hitPlayer.getName());
-                        } else {
-                            b.append(hitEntity.getName());
-                        }
-                    }
-                }
-                b.append("|");
-                arrow.remove();
-                iter.remove();
-            }
+            Projectile projectile = event.getEntity();
+            LivingEntity shooter = (LivingEntity) projectile.getShooter();
+            if (entityId != -1 && Objects.requireNonNull(shooter).getEntityId() != entityId) continue;
+            if (!(shooter instanceof Player player)) continue;
+            Block block = (event.getHitBlock() != null) ? event.getHitBlock() : projectile.getLocation().getBlock();
+            Location loc = block.getLocation();
+            b.append(locationManager.blockLocationToRelative(loc)).append(",");
+            b.append(1).append(",");
+            b.append(player.getName()).append(",");
+            Entity hitEntity = event.getHitEntity();
+            if (hitEntity != null)
+                b.append((hitEntity instanceof Player hitPlayer) ? hitPlayer.getName() : hitEntity.getName());
+            b.append("|");
+            if (removeProjectile) projectile.remove();
+            iter.remove();
         }
         if (!b.isEmpty()) b.deleteCharAt(b.length() - 1);
         return b.toString();

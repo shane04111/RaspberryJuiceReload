@@ -70,7 +70,7 @@ public class EventCommands extends CommandModule{
         String[] args = context.args();
         if (args.length != 1) return "Fail";
         int entityId = Integer.parseInt(args[0]);
-        return cmd.event.getProjectileHits(entityId);
+        return cmd.event.getProjectileHits(entityId, false);
     }
 
     private String playerClear(Context context) {
@@ -90,6 +90,6 @@ public class EventCommands extends CommandModule{
     }
     private String playerProjectileHits(Context context) {
         Player currentPlayer = cmd.playerManager.getCurrentPlayer();
-        return (cmd.event.getProjectileHits(currentPlayer.getEntityId()));
+        return (cmd.event.getProjectileHits(currentPlayer.getEntityId(), false));
     }
 }

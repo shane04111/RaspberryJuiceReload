@@ -113,7 +113,6 @@ public class RaspberryJuiceReload extends JavaPlugin implements Listener {
 
     @EventHandler(ignoreCancelled=true)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        // 只響應正確類型的事件
         switch(hitClickType) {
             case BOTH:
                 if ((event.getAction() != Action.RIGHT_CLICK_BLOCK) && (event.getAction() != Action.LEFT_CLICK_BLOCK)) return;
