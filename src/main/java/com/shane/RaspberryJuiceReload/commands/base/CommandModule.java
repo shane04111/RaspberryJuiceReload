@@ -1,4 +1,4 @@
-package com.shane.raspberryjuicereload.commands;
+package com.shane.RaspberryJuiceReload.commands.base;
 
 
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map;
 public abstract class CommandModule {
     protected final Commands cmd;
 
-    protected CommandModule(Commands command) {
+    public CommandModule(Commands command) {
         this.cmd = command;
     }
 

@@ -1,6 +1,6 @@
-package com.shane.raspberryjuicereload;
+package com.shane.RaspberryJuiceReload;
 
-import com.shane.raspberryjuicereload.commands.CommandProcessor;
+import com.shane.RaspberryJuiceReload.commands.base.CommandProcessor;
 
 import java.io.*;
 import java.net.Socket;

@@ -1,5 +1,9 @@
-package com.shane.raspberryjuicereload.commands;
+package com.shane.RaspberryJuiceReload.commands;
 
+import com.shane.RaspberryJuiceReload.commands.base.CommandHandler;
+import com.shane.RaspberryJuiceReload.commands.base.CommandModule;
+import com.shane.RaspberryJuiceReload.commands.base.Commands;
+import com.shane.RaspberryJuiceReload.commands.base.Context;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -10,7 +14,7 @@ import org.bukkit.entity.EntityType;
 import java.util.Map;
 
 public class DevCommands extends CommandModule {
-    protected DevCommands(Commands command) {
+    public DevCommands(Commands command) {
         super(command);
     }
 

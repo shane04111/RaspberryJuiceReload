@@ -1,6 +1,10 @@
-package com.shane.raspberryjuicereload.commands;
+package com.shane.RaspberryJuiceReload.commands;
 
-import com.shane.raspberryjuicereload.RaspberryJuiceReload;
+import com.shane.RaspberryJuiceReload.RaspberryJuiceReload;
+import com.shane.RaspberryJuiceReload.commands.base.CommandHandler;
+import com.shane.RaspberryJuiceReload.commands.base.CommandModule;
+import com.shane.RaspberryJuiceReload.commands.base.Commands;
+import com.shane.RaspberryJuiceReload.commands.base.Context;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -10,7 +14,7 @@ import org.bukkit.util.Vector;
 import java.util.Map;
 
 public class EntityCommands extends CommandModule {
-    protected EntityCommands(Commands command) {
+    public EntityCommands(Commands command) {
         super(command);
     }
 

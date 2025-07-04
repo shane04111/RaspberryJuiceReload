@@ -1,8 +1,8 @@
-package com.shane.raspberryjuicereload.event;
+package com.shane.RaspberryJuiceReload.event;
 
-import com.shane.raspberryjuicereload.RaspberryJuiceReload;
-import com.shane.raspberryjuicereload.manager.LocationManager;
-import com.shane.raspberryjuicereload.util.BlockUtil;
+import com.shane.RaspberryJuiceReload.RaspberryJuiceReload;
+import com.shane.RaspberryJuiceReload.manager.LocationManager;
+import com.shane.RaspberryJuiceReload.util.BlockUtil;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Location;

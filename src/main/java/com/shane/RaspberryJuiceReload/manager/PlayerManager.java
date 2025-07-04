@@ -1,6 +1,6 @@
-package com.shane.raspberryjuicereload.manager;
+package com.shane.RaspberryJuiceReload.manager;
 
-import com.shane.raspberryjuicereload.RaspberryJuiceReload;
+import com.shane.RaspberryJuiceReload.RaspberryJuiceReload;
 import org.bukkit.entity.Player;
 
 public class PlayerManager {

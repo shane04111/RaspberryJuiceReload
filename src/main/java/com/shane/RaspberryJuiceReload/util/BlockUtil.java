@@ -1,6 +1,6 @@
-package com.shane.raspberryjuicereload.util;
+package com.shane.RaspberryJuiceReload.util;
 
-import com.shane.raspberryjuicereload.RaspberryJuiceReload;
+import com.shane.RaspberryJuiceReload.RaspberryJuiceReload;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

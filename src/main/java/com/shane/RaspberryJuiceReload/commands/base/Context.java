@@ -1,4 +1,4 @@
-package com.shane.raspberryjuicereload.commands;
+package com.shane.RaspberryJuiceReload.commands.base;
 
 import org.bukkit.World;
 

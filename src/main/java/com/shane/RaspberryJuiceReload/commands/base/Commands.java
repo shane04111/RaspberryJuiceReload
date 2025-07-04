@@ -1,26 +1,19 @@
-package com.shane.raspberryjuicereload.commands;
+package com.shane.RaspberryJuiceReload.commands.base;
 
-import com.shane.raspberryjuicereload.event.Event;
-import com.shane.raspberryjuicereload.manager.EntityManager;
-import com.shane.raspberryjuicereload.manager.PlayerManager;
-import com.shane.raspberryjuicereload.RaspberryJuiceReload;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import com.shane.RaspberryJuiceReload.commands.*;
+import com.shane.RaspberryJuiceReload.event.Event;
+import com.shane.RaspberryJuiceReload.manager.EntityManager;
+import com.shane.RaspberryJuiceReload.manager.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Commands {
-    protected final CommandProcessor proc;
+    public final CommandProcessor proc;
     private final List<CommandModule> commandModules = new ArrayList<>();
-    protected final EntityManager entityManager;
-    protected final PlayerManager playerManager;
+    public final EntityManager entityManager;
+    public final PlayerManager playerManager;
     public final Event event;
 
     public Commands(CommandProcessor processor) {

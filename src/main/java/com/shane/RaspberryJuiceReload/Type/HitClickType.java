@@ -1,4 +1,4 @@
-package com.shane.raspberryjuicereload.type;
+package com.shane.RaspberryJuiceReload.type;
 
 public enum HitClickType {
     LEFT, RIGHT, BOTH

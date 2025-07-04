@@ -1,4 +1,4 @@
-package com.shane.raspberryjuicereload.commands;
+package com.shane.RaspberryJuiceReload.commands.base;
 
 
 public interface CommandHandler {

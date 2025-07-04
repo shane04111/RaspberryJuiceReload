@@ -1,8 +1,8 @@
-package com.shane.raspberryjuicereload.commands;
+package com.shane.RaspberryJuiceReload.commands.base;
 
-import com.shane.raspberryjuicereload.manager.LocationManager;
-import com.shane.raspberryjuicereload.RaspberryJuiceReload;
-import com.shane.raspberryjuicereload.type.LocationType;
+import com.shane.RaspberryJuiceReload.manager.LocationManager;
+import com.shane.RaspberryJuiceReload.RaspberryJuiceReload;
+import com.shane.RaspberryJuiceReload.type.LocationType;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -16,9 +16,9 @@ import java.util.Map;
 // 命令處理器類
 public class CommandProcessor {
     private final Map<String, CommandHandler> commandHandlers = new HashMap<>();
-    protected final RaspberryJuiceReload plugin;
+    public final RaspberryJuiceReload plugin;
     public final Commands commands;
-    protected final LocationManager location;
+    public final LocationManager location;
 
     public CommandProcessor(RaspberryJuiceReload plugin) {
         this.plugin = plugin;

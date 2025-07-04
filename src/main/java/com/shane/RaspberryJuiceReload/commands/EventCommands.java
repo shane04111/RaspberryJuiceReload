@@ -1,10 +1,14 @@
-package com.shane.raspberryjuicereload.commands;
+package com.shane.RaspberryJuiceReload.commands;
 
+import com.shane.RaspberryJuiceReload.commands.base.CommandHandler;
+import com.shane.RaspberryJuiceReload.commands.base.CommandModule;
+import com.shane.RaspberryJuiceReload.commands.base.Commands;
+import com.shane.RaspberryJuiceReload.commands.base.Context;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
 
-public class EventCommands extends CommandModule{
+public class EventCommands extends CommandModule {
     public EventCommands(Commands commands) {
         super(commands);
     }
