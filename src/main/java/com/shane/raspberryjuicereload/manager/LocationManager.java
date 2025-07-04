@@ -1,6 +1,6 @@
-package com.shane.RaspberryJuiceReload.manager;
+package com.shane.raspberryjuicereload.manager;
 
-import com.shane.RaspberryJuiceReload.commands.base.Context;
+import com.shane.raspberryjuicereload.commands.base.Context;
 import org.bukkit.Location;
 import org.bukkit.World;
 

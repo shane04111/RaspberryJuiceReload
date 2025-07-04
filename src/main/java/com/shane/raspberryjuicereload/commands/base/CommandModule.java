@@ -1,4 +1,4 @@
-package com.shane.RaspberryJuiceReload.commands.base;
+package com.shane.raspberryjuicereload.commands.base;
 
 
 import java.util.Map;

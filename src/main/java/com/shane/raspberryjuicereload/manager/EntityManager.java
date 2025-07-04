@@ -1,6 +1,6 @@
-package com.shane.RaspberryJuiceReload.manager;
+package com.shane.raspberryjuicereload.manager;
 
-import com.shane.RaspberryJuiceReload.RaspberryJuiceReload;
+import com.shane.raspberryjuicereload.RaspberryJuiceReload;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 

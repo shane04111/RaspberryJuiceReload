@@ -1,12 +1,12 @@
-package com.shane.RaspberryJuiceReload.commands;
+package com.shane.raspberryjuicereload.commands;
 
-import com.shane.RaspberryJuiceReload.commands.base.CommandHandler;
-import com.shane.RaspberryJuiceReload.commands.base.CommandModule;
-import com.shane.RaspberryJuiceReload.commands.base.Commands;
-import com.shane.RaspberryJuiceReload.commands.base.Context;
-import com.shane.RaspberryJuiceReload.manager.EntityManager;
-import com.shane.RaspberryJuiceReload.RaspberryJuiceReload;
-import com.shane.RaspberryJuiceReload.util.BlockUtil;
+import com.shane.raspberryjuicereload.commands.base.CommandHandler;
+import com.shane.raspberryjuicereload.commands.base.CommandModule;
+import com.shane.raspberryjuicereload.commands.base.Commands;
+import com.shane.raspberryjuicereload.commands.base.Context;
+import com.shane.raspberryjuicereload.manager.EntityManager;
+import com.shane.raspberryjuicereload.RaspberryJuiceReload;
+import com.shane.raspberryjuicereload.util.BlockUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

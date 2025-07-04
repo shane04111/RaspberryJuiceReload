@@ -1,8 +1,8 @@
-package com.shane.RaspberryJuiceReload.commands.base;
+package com.shane.raspberryjuicereload.commands.base;
 
-import com.shane.RaspberryJuiceReload.manager.LocationManager;
-import com.shane.RaspberryJuiceReload.RaspberryJuiceReload;
-import com.shane.RaspberryJuiceReload.type.LocationType;
+import com.shane.raspberryjuicereload.manager.LocationManager;
+import com.shane.raspberryjuicereload.RaspberryJuiceReload;
+import com.shane.raspberryjuicereload.type.LocationType;
 import org.bukkit.Location;
 import org.bukkit.World;
 

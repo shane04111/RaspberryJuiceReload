@@ -1,9 +1,9 @@
-package com.shane.RaspberryJuiceReload.commands.base;
+package com.shane.raspberryjuicereload.commands.base;
 
-import com.shane.RaspberryJuiceReload.commands.*;
-import com.shane.RaspberryJuiceReload.event.Event;
-import com.shane.RaspberryJuiceReload.manager.EntityManager;
-import com.shane.RaspberryJuiceReload.manager.PlayerManager;
+import com.shane.raspberryjuicereload.commands.*;
+import com.shane.raspberryjuicereload.event.Event;
+import com.shane.raspberryjuicereload.manager.EntityManager;
+import com.shane.raspberryjuicereload.manager.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.List;
