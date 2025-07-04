@@ -59,7 +59,7 @@ public class Event {
                     Location loc = block.getLocation();
                     strBuilder.append(locationManager.blockLocationToRelative(loc));
                     strBuilder.append(",");
-                    strBuilder.append(BlockUtil.blockFaceToNotch(event.getBlockFace()));
+                    strBuilder.append(event.getBlockFace());
                     strBuilder.append(",");
                     strBuilder.append(event.getPlayer().getEntityId());
                     strBuilder.append("|");
@@ -114,9 +114,15 @@ public class Event {
     }
 
     public String getProjectileHits(int entityId, boolean removeProjectile) {
+        return getProjectileHits(entityId, removeProjectile, "");
+    }
+
+    public String getProjectileHits(int entityId, boolean removeProjectile, String getEntityType) {
         StringBuilder b = new StringBuilder();
+        EntityType entityType = EntityType.valueOf(getEntityType);
         for (Iterator<ProjectileHitEvent> iter = projectileHitQueue.iterator(); iter.hasNext(); ) {
             ProjectileHitEvent event = iter.next();
+            if (!Objects.equals(getEntityType, "") && entityType != event.getEntityType()) continue;
             Projectile projectile = event.getEntity();
             LivingEntity shooter = (LivingEntity) projectile.getShooter();
             if (entityId != -1 && Objects.requireNonNull(shooter).getEntityId() != entityId) continue;
