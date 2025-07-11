@@ -4,14 +4,20 @@ import com.shane.raspberryjuicereload.commands.base.CommandHandler;
 import com.shane.raspberryjuicereload.commands.base.CommandModule;
 import com.shane.raspberryjuicereload.commands.base.Commands;
 import com.shane.raspberryjuicereload.commands.base.Context;
+import com.shane.raspberryjuicereload.manager.ItemStackManager;
+import com.shane.raspberryjuicereload.manager.PotionEffectManager;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.LargeFireball;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class PlayerCommands extends CommandModule {
     public PlayerCommands(Commands command) {
@@ -34,6 +40,15 @@ public class PlayerCommands extends CommandModule {
         handlers.put("player.setPitch", this::setPitch);
         handlers.put("player.getEntities", this::getEntities);
         handlers.put("player.removeEntities", this::removeEntities);
+
+        handlers.put("player.inventory.clear", this::clearInventory);
+        handlers.put("player.inventory.give", this::giveItem);
+        handlers.put("player.inventory.set", this::setItem);
+        handlers.put("player.inventory.remove", this::removeItem);
+
+        handlers.put("player.effect.give", this::giveEffect);
+        handlers.put("player.effect.clear", this::clearEffect);
+        handlers.put("player.effect.remove", this::removeEffect);
     }
 
     private String getPos(Context context) {
@@ -136,7 +151,6 @@ public class PlayerCommands extends CommandModule {
     }
 
     private DataResult getData(Context context) {
-        List<Object> res = new ArrayList<>();
         String[] args = context.args();
         if (args.length != 2) return null;
         return new DataResult(context.world(), cmd.playerManager.getCurrentPlayer(), Integer.parseInt(args[0]), Integer.parseInt(args[1]));
@@ -152,5 +166,65 @@ public class PlayerCommands extends CommandModule {
         DataResult data = getData(context);
         if (data == null) return "Fail";
         return cmd.entityManager.removeEntities(data.world, data.player.getEntityId(), data.distance, data.entityType);
+    }
+
+    private String clearInventory(Context context) {
+        String[] args = context.args();
+        if (args.length != 1) return "Fail";
+        int var = Integer.parseInt(args[0]);
+        Inventory inv = cmd.playerManager.getCurrentPlayer().getInventory();
+        if (var == -1) {
+            inv.clear();
+        } else {
+            inv.clear(var);
+        }
+        return "Success";
+    }
+
+    private String giveItem(Context context) {
+        String[] args = context.args();
+        if (args.length != 2) return "Fail";
+        Inventory inv = cmd.playerManager.getCurrentPlayer().getInventory();
+        inv.addItem(new ItemStackManager(args).getItemStack());
+        return "Success";
+    }
+
+    private String setItem(Context context) {
+        String[] args = context.args();
+        if (args.length != 3) return "Fail";
+        Inventory inv = cmd.playerManager.getCurrentPlayer().getInventory();
+        inv.setItem(Integer.parseInt(args[0]), new ItemStackManager(args[1], args[2]).getItemStack());
+        return "Success";
+    }
+
+    private String removeItem(Context context) {
+        String[] args = context.args();
+        if (args.length != 2) return "Fail";
+        Inventory inv = cmd.playerManager.getCurrentPlayer().getInventory();
+        inv.removeItemAnySlot(new ItemStackManager(args).getItemStack());
+        return "Success";
+    }
+
+    private String giveEffect(Context context) {
+        String[] args = context.args();
+        if (args.length != 4) return "Fail";
+        Player player = cmd.playerManager.getCurrentPlayer();
+        return (player.addPotionEffect(new PotionEffectManager(args).getPotionEffect())) ? "Success" : "Fail";
+    }
+    
+    private String clearEffect(Context context) {
+        Player player = cmd.playerManager.getCurrentPlayer();
+        player.clearActivePotionEffects();
+        return "Success";
+    }
+
+    private String removeEffect(Context context) {
+        String[] args = context.args();
+        if (args.length != 1) return "Fail";
+        Player player = cmd.playerManager.getCurrentPlayer();
+        PotionEffectType effect = PotionEffectType.getByName(args[0]);
+        if (effect == null) return "Fail";
+        player.removePotionEffect(effect);
+        return "Success";
     }
 }

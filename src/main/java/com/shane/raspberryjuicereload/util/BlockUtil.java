@@ -97,17 +97,4 @@ public class BlockUtil {
         BlockData data = Bukkit.createBlockData(newBlockType, newBlockData);
         thisBlock.setBlockData(data);
     }
-
-    public static int blockFaceToNotch(BlockFace blockFace) {
-        // 轉換BlockFace到數值
-        return switch (blockFace) {
-            case DOWN -> 0;
-            case UP -> 1;
-            case NORTH -> 2;
-            case SOUTH -> 3;
-            case WEST -> 4;
-            case EAST -> 5;
-            default -> 7;
-        };
-    }
 }
