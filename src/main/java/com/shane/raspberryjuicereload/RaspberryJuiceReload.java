@@ -1,40 +1,28 @@
 package com.shane.raspberryjuicereload;
 
-import java.net.InetSocketAddress;
-import java.util.*;
-
 import com.shane.raspberryjuicereload.type.HitClickType;
 import com.shane.raspberryjuicereload.type.LocationType;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetSocketAddress;
+import java.util.*;
+
 public class RaspberryJuiceReload extends JavaPlugin implements Listener {
     public static final Logger logger = LoggerFactory.getLogger("RaspberryJuiceReload");
-
-    public static final Set<Material> blockBreakDetectionTools = EnumSet.of(
-            Material.NETHERITE_SWORD,
-            Material.DIAMOND_SWORD,
-            Material.GOLDEN_SWORD,
-            Material.IRON_SWORD,
-            Material.STONE_SWORD,
-            Material.WOODEN_SWORD
-    );
 
     public ServerListenerThread serverThread;
     public List<RemoteSession> sessions;
@@ -63,7 +51,7 @@ public class RaspberryJuiceReload extends JavaPlugin implements Listener {
         String location = Objects.requireNonNull(this.getConfig().getString("location")).toUpperCase();
         try {
             locationType = LocationType.valueOf(location);
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             logger.warn("warning - location value in config.yml should be ABSOLUTE or RELATIVE - '{}' found", location);
             locationType = LocationType.RELATIVE;
         }
@@ -73,7 +61,7 @@ public class RaspberryJuiceReload extends JavaPlugin implements Listener {
         String hitClick = Objects.requireNonNull(this.getConfig().getString("hitclick")).toUpperCase();
         try {
             hitClickType = HitClickType.valueOf(hitClick);
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             logger.warn("warning - hitclick value in config.yml should be LEFT, RIGHT or BOTH - '{}' found", hitClick);
             hitClickType = HitClickType.RIGHT;
         }
@@ -111,40 +99,23 @@ public class RaspberryJuiceReload extends JavaPlugin implements Listener {
         server.sendMessage(Component.text("Welcome ").append(Component.text(player.getName())));
     }
 
-    @EventHandler(ignoreCancelled=true)
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        switch(hitClickType) {
-            case BOTH:
-                if ((event.getAction() != Action.RIGHT_CLICK_BLOCK) && (event.getAction() != Action.LEFT_CLICK_BLOCK)) return;
-                break;
-            case LEFT:
-                if (event.getAction() != Action.LEFT_CLICK_BLOCK) return;
-                break;
-            case RIGHT:
-                if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-                break;
-        }
-
-        ItemStack currentTool = event.getItem();
-        if (currentTool == null || !blockBreakDetectionTools.contains(currentTool.getType())) {
-            return;
-        }
-
-        for (RemoteSession session: sessions) {
+        for (RemoteSession session : sessions) {
             session.commandProcessor.commands.event.queuePlayerInteractEvent(event);
         }
     }
 
-    @EventHandler(ignoreCancelled=true)
+    @EventHandler(ignoreCancelled = true)
     public void onChatPosted(AsyncChatEvent event) {
-        for (RemoteSession session: sessions) {
+        for (RemoteSession session : sessions) {
             session.commandProcessor.commands.event.queueChatPostedEvent(event);
         }
     }
 
-    @EventHandler(ignoreCancelled=true)
+    @EventHandler(ignoreCancelled = true)
     public void onProjectileHit(ProjectileHitEvent event) {
-        for (RemoteSession session: sessions) {
+        for (RemoteSession session : sessions) {
             session.commandProcessor.commands.event.queueProjectileHitEvent(event);
         }
     }
@@ -163,27 +134,19 @@ public class RaspberryJuiceReload extends JavaPlugin implements Listener {
 
     public Player getNamedPlayer(String name) {
         if (name == null) return null;
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            if (name.equals(player.getName())) {
-                return player;
-            }
-        }
-        return null;
+        return Bukkit.getPlayer(name);
     }
 
     public Player getHostPlayer() {
         if (hostPlayer != null) return hostPlayer;
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            return player;
-        }
-        return null;
+        return Bukkit.getOnlinePlayers().stream().findFirst().orElse(null);
     }
 
     /**
      * 根據ID獲取實體
      */
     public Entity getEntity(int id) {
-        for (Player p: getServer().getOnlinePlayers()) {
+        for (Player p : getServer().getOnlinePlayers()) {
             if (p.getEntityId() == id) {
                 return p;
             }
@@ -212,7 +175,7 @@ public class RaspberryJuiceReload extends JavaPlugin implements Listener {
     public void onDisable() {
         getServer().getScheduler().cancelTasks(this);
 
-        for (RemoteSession session: sessions) {
+        for (RemoteSession session : sessions) {
             try {
                 session.close();
             } catch (Exception e) {
@@ -236,7 +199,7 @@ public class RaspberryJuiceReload extends JavaPlugin implements Listener {
         @Override
         public void run() {
             Iterator<RemoteSession> sI = sessions.iterator();
-            while(sI.hasNext()) {
+            while (sI.hasNext()) {
                 RemoteSession s = sI.next();
                 if (s.pendingRemoval) {
                     s.close();

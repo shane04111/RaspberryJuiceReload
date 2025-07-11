@@ -37,15 +37,17 @@ public class EventCommands extends CommandModule {
     }
 
     private String blockHits(Context context) {
-        return cmd.event.getBlockHits();
+        return cmd.event.getBlockHitEvent().getBlockHits();
     }
 
     private String chatPosts(Context context) {
-        return cmd.event.getChatPosts();
+        return cmd.event.getChatEvent().getChatPosts();
     }
 
     private String projectileHits(Context context) {
-        return cmd.event.getProjectileHits();
+        String[] args = context.args();
+        if (args.length != 1) return "Fail";
+        return cmd.event.getProjectileHitEvent().getProjectileHits(Boolean.parseBoolean(args[0]));
     }
 
     private String entityEventsClear(Context context) {
@@ -60,21 +62,22 @@ public class EventCommands extends CommandModule {
         String[] args = context.args();
         if (args.length != 1) return "Fail";
         int entityId = Integer.parseInt(args[0]);
-        return cmd.event.getBlockHits(entityId);
+        return cmd.event.getBlockHitEvent().getBlockHits(entityId);
     }
 
     private String entityEventsChatPosts(Context context) {
         String[] args = context.args();
         if (args.length != 1) return "Fail";
         int entityId = Integer.parseInt(args[0]);
-        return cmd.event.getChatPosts(entityId);
+        return cmd.event.getChatEvent().getChatPosts(entityId);
     }
 
     private String entityEventsProjectileHits(Context context) {
         String[] args = context.args();
-        if (args.length != 1) return "Fail";
+        if (args.length != 3) return "Fail";
         int entityId = Integer.parseInt(args[0]);
-        return cmd.event.getProjectileHits(entityId, false);
+        boolean remove = Boolean.parseBoolean(args[1]);
+        return cmd.event.getProjectileHitEvent().getProjectileHits(entityId, remove, args[2]);
     }
 
     private String playerClear(Context context) {
@@ -85,15 +88,19 @@ public class EventCommands extends CommandModule {
 
     private String playerHits(Context context) {
         Player currentPlayer = cmd.playerManager.getCurrentPlayer();
-        return (cmd.event.getBlockHits(currentPlayer.getEntityId()));
+        return (cmd.event.getBlockHitEvent().getBlockHits(currentPlayer.getEntityId()));
     }
 
     private String playerChatPosts(Context context) {
         Player currentPlayer = cmd.playerManager.getCurrentPlayer();
-        return (cmd.event.getChatPosts(currentPlayer.getEntityId()));
+        return (cmd.event.getChatEvent().getChatPosts(currentPlayer.getEntityId()));
     }
+
     private String playerProjectileHits(Context context) {
-        Player currentPlayer = cmd.playerManager.getCurrentPlayer();
-        return (cmd.event.getProjectileHits(currentPlayer.getEntityId(), false));
+        String[] args = context.args();
+        if (args.length != 2) return "Fail";
+        int entityId = cmd.playerManager.getCurrentPlayer().getEntityId();
+        boolean remove = Boolean.parseBoolean(args[1]);
+        return (cmd.event.getProjectileHitEvent().getProjectileHits(entityId, remove, args[1]));
     }
 }
