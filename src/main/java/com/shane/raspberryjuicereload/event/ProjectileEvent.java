@@ -22,15 +22,10 @@ public class ProjectileEvent extends BaseEvent implements IQueue {
         super(locationManager);
     }
 
-    public String getProjectileHits(boolean removeProjectile) {
-        return getProjectileHits(-1, removeProjectile);
+    public String getProjectileHits(boolean removeProjectile, boolean removeHit) {
+        return getProjectileHits(-1, "SNOWBALL", removeProjectile, removeHit);
     }
-
-    public String getProjectileHits(int entityId, boolean removeProjectile) {
-        return getProjectileHits(entityId, removeProjectile, "");
-    }
-
-    public String getProjectileHits(int entityId, boolean removeProjectile, String getEntityType) {
+    public String getProjectileHits(int entityId, String getEntityType, boolean removeProjectile, boolean removeHit) {
         StringBuilder b = new StringBuilder();
         EntityType entityType = (!EnumUtils.isValidEnum(EntityType.class, getEntityType)) ? EntityType.valueOf(getEntityType) : null;
         for (Iterator<ProjectileHitEvent> iter = projectileHitQueue.iterator(); iter.hasNext(); ) {
@@ -46,8 +41,10 @@ public class ProjectileEvent extends BaseEvent implements IQueue {
             b.append(1).append(",");
             b.append(player.getName()).append(",");
             Entity hitEntity = event.getHitEntity();
-            if (hitEntity != null)
+            if (hitEntity != null) {
                 b.append((hitEntity instanceof Player hitPlayer) ? hitPlayer.getName() : hitEntity.getName());
+                if (!(hitEntity instanceof Player) && removeHit) hitEntity.remove();
+            }
             b.append("|");
             if (removeProjectile) projectile.remove();
             iter.remove();
