@@ -12,7 +12,7 @@ public class ItemStackManager {
     }
 
     public ItemStackManager(String item, String amount) {
-        this(Material.valueOf(item), Integer.parseInt(amount));
+        this(Material.valueOf(item.toUpperCase()), Integer.parseInt(amount));
     }
 
     public ItemStackManager(Material material, int amount) {

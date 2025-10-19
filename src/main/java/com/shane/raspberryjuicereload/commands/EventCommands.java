@@ -46,8 +46,8 @@ public class EventCommands extends CommandModule {
 
     private String projectileHits(Context context) {
         String[] args = context.args();
-        if (args.length != 1) return "Fail";
-        return cmd.event.getProjectileHitEvent().getProjectileHits(Boolean.parseBoolean(args[0]));
+        if (args.length != 2) return "Fail";
+        return cmd.event.getProjectileHitEvent().getProjectileHits(Boolean.parseBoolean(args[0]), Boolean.parseBoolean(args[1]));
     }
 
     private String entityEventsClear(Context context) {
@@ -74,10 +74,11 @@ public class EventCommands extends CommandModule {
 
     private String entityEventsProjectileHits(Context context) {
         String[] args = context.args();
-        if (args.length != 3) return "Fail";
+        if (args.length != 4) return "Fail";
         int entityId = Integer.parseInt(args[0]);
-        boolean remove = Boolean.parseBoolean(args[1]);
-        return cmd.event.getProjectileHitEvent().getProjectileHits(entityId, remove, args[2]);
+        boolean remove = Boolean.parseBoolean(args[2]);
+        boolean removeHit = Boolean.parseBoolean(args[3]);
+        return cmd.event.getProjectileHitEvent().getProjectileHits(entityId, args[1], remove, removeHit);
     }
 
     private String playerClear(Context context) {
@@ -98,9 +99,10 @@ public class EventCommands extends CommandModule {
 
     private String playerProjectileHits(Context context) {
         String[] args = context.args();
-        if (args.length != 2) return "Fail";
+        if (args.length != 3) return "Fail";
         int entityId = cmd.playerManager.getCurrentPlayer().getEntityId();
         boolean remove = Boolean.parseBoolean(args[1]);
-        return (cmd.event.getProjectileHitEvent().getProjectileHits(entityId, remove, args[1]));
+        boolean removeHit = Boolean.parseBoolean(args[2]);
+        return (cmd.event.getProjectileHitEvent().getProjectileHits(entityId, args[0], remove, removeHit));
     }
 }
