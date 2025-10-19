@@ -1,5 +1,6 @@
 package com.shane.raspberryjuicereload;
 
+import com.shane.raspberryjuicereload.gui.Window;
 import com.shane.raspberryjuicereload.type.HitClickType;
 import com.shane.raspberryjuicereload.type.LocationType;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -29,6 +30,7 @@ public class RaspberryJuiceReload extends JavaPlugin implements Listener {
     public Player hostPlayer = null;
     private LocationType locationType;
     private HitClickType hitClickType;
+    private Window window;
 
     public LocationType getLocationType() {
         return locationType;
@@ -40,12 +42,19 @@ public class RaspberryJuiceReload extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        this.window = new Window();
+        this.window.initialize();
+
         this.saveDefaultConfig();
 
         String hostname = this.getConfig().getString("hostname");
+        String devHostname = this.getConfig().getString("port");
         if (hostname == null || hostname.isEmpty()) hostname = "0.0.0.0";
+        if (devHostname == null || devHostname.isEmpty()) devHostname = "127.0.0.1";
         int port = this.getConfig().getInt("port");
+        int devPort = this.getConfig().getInt("devPort");
         logger.info("Using host:port - {}:{}", hostname, port);
+        logger.info("Using devPort:port - {}:{}", devHostname, port);
 
         // 從配置中獲取位置類型
         String location = Objects.requireNonNull(this.getConfig().getString("location")).toUpperCase();

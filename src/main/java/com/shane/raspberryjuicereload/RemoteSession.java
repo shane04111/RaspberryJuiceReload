@@ -100,6 +100,7 @@ public class RemoteSession {
     protected void handleLine(String line) {
         String methodName = line.substring(0, line.indexOf("("));
         String[] args = line.substring(line.indexOf("(") + 1, line.length() - 1).split(",");
+        RaspberryJuiceReload.logger.info(line);
         handleCommand(methodName, args);
     }
 
